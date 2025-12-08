@@ -1,10 +1,12 @@
 # This environment is intended to be used for running JamUNet and additional notebooks
-
+# This is the custom version for MORPH1
 name: braided
 channels:
   - conda-forge
   - defaults
+  - pytorch
 dependencies:
+  - python=3.9.17
   - ca-certificates
   - certifi
   - dash=2.13.0
@@ -19,13 +21,13 @@ dependencies:
   - openpyxl
   - openssl
   - pandas=1.5.3
-  - python=3.9.17
-  - pytorch::pytorch=2.0.1
   - scikit-learn=1.2.2
   - scipy=1.9.3
   - seaborn=0.12.2
   - tabulate
   - torchinfo=1.8.0
-  - torchvision
   - tqdm=4.66.1
-  # - pytorch::cpuonly
+  # CPU-only PyTorch and torchvision
+  - pytorch=2.0.1
+  - torchvision=0.15.2
+  - cpuonly
