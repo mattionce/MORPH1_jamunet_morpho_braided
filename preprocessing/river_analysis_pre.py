@@ -188,43 +188,43 @@ def fill_missing_data(df, variable, freq='D'):
     
     return df_filled
 
-# --------------- #
-# the next part of the module contains intitated functions but never used so far 
+# # --------------- #
+# # the next part of the module contains intitated functions but never used so far 
 
-def get_info(df):
-    '''
-    This function is still not implemented. It will be done as soon as possible or never.
+# def get_info(df):
+#     '''
+#     This function is still not implemented. It will be done as soon as possible or never.
 
-    Function used to get info on data regarding measured variable, measurement frequency, location,
-    and years of record.
+#     Function used to get info on data regarding measured variable, measurement frequency, location,
+#     and years of record.
 
-    Input:
-          df = pandas DataFrame, contains dates and measured variables 
-    '''
-    # specify measured variable
-    # if 'WL' is in str(name of df):
-    #     var1 = 'water level'
-    # elif 'Q':
-    #     var1 = 'discahrge'
-    # elif 'Umax':
-    #     var1 = 'max velocity'
+#     Input:
+#           df = pandas DataFrame, contains dates and measured variables 
+#     '''
+#     # specify measured variable
+#     # if 'WL' is in str(name of df):
+#     #     var1 = 'water level'
+#     # elif 'Q':
+#     #     var1 = 'discahrge'
+#     # elif 'Umax':
+#     #     var1 = 'max velocity'
 
-    # specify data measurement frequency
-    # if '_d_' is in str(name of df):
-    #     time_int = 'daily'
-    # elif '_m_':
-    #     time_int = 'monthly'
-    # elif '_bw_':
-    #     time_int = 'biweekly'
+#     # specify data measurement frequency
+#     # if '_d_' is in str(name of df):
+#     #     time_int = 'daily'
+#     # elif '_m_':
+#     #     time_int = 'monthly'
+#     # elif '_bw_':
+#     #     time_int = 'biweekly'
     
-    # specify data measurement location
-    # if '_Baha_' is in str(name of df):
-    #     loc = 'Bahadurabad'
-    # elif '_Sir_':
-    #     loc = 'Sirjganj'
-    # elif '_Ari_':
-    #     loc = 'Aricha'
+#     # specify data measurement location
+#     # if '_Baha_' is in str(name of df):
+#     #     loc = 'Bahadurabad'
+#     # elif '_Sir_':
+#     #     loc = 'Sirjganj'
+#     # elif '_Ari_':
+#     #     loc = 'Aricha'
 
-    # retrieve recorded years
+#     # retrieve recorded years
         
-    return None # var, time_int, loc, rec_yrs  
+#     return None # var, time_int, loc, rec_yrs  

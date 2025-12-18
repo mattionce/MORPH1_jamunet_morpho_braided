@@ -502,106 +502,106 @@ def plot_image_series(collection, train_val_test, year, month, day=1, reach = 1,
 
     return None
 
-def plot_input_images(train_val_test, reach_id, cmap='gray', vmin=0, vmax=2, img_res=60, 
-                      dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', show=False):
-    '''
-    Plot all the images within a reach and use (training, validation and testing) that are used for the creation of the input dataset.
+# def plot_input_images(train_val_test, reach_id, cmap='gray', vmin=0, vmax=2, img_res=60, 
+#                       dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', show=False):
+#     '''
+#     Plot all the images within a reach and use (training, validation and testing) that are used for the creation of the input dataset.
     
-    Inputs:
-           train_val_test = str, specifies for what the images are used for.
-                            available options: 'training', 'validation' and 'testing'
-           reach_id = int, representing reach number. Number increases going upstream.
-                      default: 1, applies for both validation and testing.
-                   For training, the available range is 1-28 (included)
-           cmap = str, key to set the visualization channels
-                  default: 'gray'
-           vmin = int, minimum value needed for visualization.
-                  default: 0, can range from 0 to 255.  
-           vmax = int, maximum value needed for visualization.
-                  default: 2, can range from 0 to 255. 
-           img_res = int, image resolution (m).
-                     default: 60 m. 
-           dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
-                       default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
-           show = bool, specifies whether single images are shown or not when calling teh `show_image_array` function.
-                  default: False, if set to True images will be shown separately
+#     Inputs:
+#            train_val_test = str, specifies for what the images are used for.
+#                             available options: 'training', 'validation' and 'testing'
+#            reach_id = int, representing reach number. Number increases going upstream.
+#                       default: 1, applies for both validation and testing.
+#                    For training, the available range is 1-28 (included)
+#            cmap = str, key to set the visualization channels
+#                   default: 'gray'
+#            vmin = int, minimum value needed for visualization.
+#                   default: 0, can range from 0 to 255.  
+#            vmax = int, maximum value needed for visualization.
+#                   default: 2, can range from 0 to 255. 
+#            img_res = int, image resolution (m).
+#                      default: 60 m. 
+#            dir_folders = str, directory where folders are stored
+#                          default: r'data\satellite\dataset'
+#            collection = str, specifies the satellite images collection.
+#                        default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
+#            show = bool, specifies whether single images are shown or not when calling teh `show_image_array` function.
+#                   default: False, if set to True images will be shown separately
     
-    Output:
-           none, plots all images in series 
-    '''
+#     Output:
+#            none, plots all images in series 
+#     '''
     
-    if collection != r'JRC_GSW1_4_MonthlyHistory':
-        raise ValueError(fr'The collection set is {collection}, but this function only works for r"JRC_GSW1_4_MonthlyHistory"') 
+#     if collection != r'JRC_GSW1_4_MonthlyHistory':
+#         raise ValueError(fr'The collection set is {collection}, but this function only works for r"JRC_GSW1_4_MonthlyHistory"') 
     
-    # get folder path
-    folder = os.path.join(dir_folders, collection + fr'_{train_val_test}_r{reach_id}')
-    # count number of images in the folder
-    num_images = len(os.listdir(folder))
+#     # get folder path
+#     folder = os.path.join(dir_folders, collection + fr'_{train_val_test}_r{reach_id}')
+#     # count number of images in the folder
+#     num_images = len(os.listdir(folder))
 
-    num_cols = min(num_images, 5) # 5 images per row
-    num_rows = (num_images - 1) // num_cols + 1
+#     num_cols = min(num_images, 5) # 5 images per row
+#     num_rows = (num_images - 1) // num_cols + 1
 
-    fig, axes = plt.subplots(num_rows, num_cols, figsize=(18, 6.5*num_rows))
+#     fig, axes = plt.subplots(num_rows, num_cols, figsize=(18, 6.5*num_rows))
 
-    # visualize the images in series
-    for idx, filename in enumerate(os.listdir(folder)):
+#     # visualize the images in series
+#     for idx, filename in enumerate(os.listdir(folder)):
 
-        year, month, day, _, _ = filename.split(f'_')
+#         year, month, day, _, _ = filename.split(f'_')
 
-        if num_rows == 1:
-            ax = axes[idx % num_cols]
-        else:
-            row = idx // num_cols
-            col = idx % num_cols
-            ax = axes[row, col]
+#         if num_rows == 1:
+#             ax = axes[idx % num_cols]
+#         else:
+#             row = idx // num_cols
+#             col = idx % num_cols
+#             ax = axes[row, col]
 
-        img_path = get_path_images(dir_folders, collection, train_val_test, int(year), int(month), int(day), reach_id)
+#         img_path = get_path_images(dir_folders, collection, train_val_test, int(year), int(month), int(day), reach_id)
     
-        image = show_image_array(img_path, cmap=cmap, vmin=vmin, vmax=vmax, show=show)
-        ax.imshow(image, cmap=cmap, vmin=vmin, vmax=vmax)
-        ax.set_title(f'{year}-{month}-{day}')
+#         image = show_image_array(img_path, cmap=cmap, vmin=vmin, vmax=vmax, show=show)
+#         ax.imshow(image, cmap=cmap, vmin=vmin, vmax=vmax)
+#         ax.set_title(f'{year}-{month}-{day}')
         
-        # arrow to show flow direction
-        ax.arrow(100, 125, 0, 200, width=10, facecolor='black', edgecolor='white') 
+#         # arrow to show flow direction
+#         ax.arrow(100, 125, 0, 200, width=10, facecolor='black', edgecolor='white') 
         
-        shp = image.shape
-        x_ticks = np.arange(0, shp[1]+1, 150)
-        y_ticks = np.arange(0, shp[0]+1, 200)  
+#         shp = image.shape
+#         x_ticks = np.arange(0, shp[1]+1, 150)
+#         y_ticks = np.arange(0, shp[0]+1, 200)  
 
-        # Convert x_ticks and y_ticks from pixels to meters
-        x_tick_labels = [round(tick * img_res/1000, 2) for tick in x_ticks]  
-        y_tick_labels = [round(tick * img_res/1000, 2) for tick in y_ticks]
+#         # Convert x_ticks and y_ticks from pixels to meters
+#         x_tick_labels = [round(tick * img_res/1000, 2) for tick in x_ticks]  
+#         y_tick_labels = [round(tick * img_res/1000, 2) for tick in y_ticks]
   
-        ax.set_xticks(x_ticks, x_tick_labels)
-        ax.set_xlabel('Width (km)', fontsize=11)
-        # ax.invert_yaxis() # can be confusing as flow is south-ward directed
-        if col == 0:
-            ax.set_yticks(y_ticks)
-            ax.set_yticklabels(y_tick_labels)
-            ax.set_ylabel('Lentgh (km)', fontsize=11) 
-        else:
-            ax.set_yticks(y_ticks)
-            ax.set_yticklabels([])
+#         ax.set_xticks(x_ticks, x_tick_labels)
+#         ax.set_xlabel('Width (km)', fontsize=11)
+#         # ax.invert_yaxis() # can be confusing as flow is south-ward directed
+#         if col == 0:
+#             ax.set_yticks(y_ticks)
+#             ax.set_yticklabels(y_tick_labels)
+#             ax.set_ylabel('Lentgh (km)', fontsize=11) 
+#         else:
+#             ax.set_yticks(y_ticks)
+#             ax.set_yticklabels([])
         
-        # ax.axis('off')  # Hide axis
+#         # ax.axis('off')  # Hide axis
 
-    # hide any remaining empty subplots
-    for idx in range(num_images, num_rows * num_cols):
-        if num_rows == 1:
-            ax = axes[idx % num_cols]
-        else:
-            row = idx // num_cols
-            col = idx % num_cols
-            ax = axes[row, col]
-        fig.delaxes(ax)
+#     # hide any remaining empty subplots
+#     for idx in range(num_images, num_rows * num_cols):
+#         if num_rows == 1:
+#             ax = axes[idx % num_cols]
+#         else:
+#             row = idx // num_cols
+#             col = idx % num_cols
+#             ax = axes[row, col]
+#         fig.delaxes(ax)
 
-    # adjust title position depending on number of rows
-    title_top = 0.98 + 0.004 * num_rows 
+#     # adjust title position depending on number of rows
+#     title_top = 0.98 + 0.004 * num_rows 
 
-    fig.suptitle(f'Reach {reach_id} {train_val_test}', fontsize=14, y=title_top)
-    plt.tight_layout()
-    plt.show()       
+#     fig.suptitle(f'Reach {reach_id} {train_val_test}', fontsize=14, y=title_top)
+#     plt.tight_layout()
+#     plt.show()       
 
-    return None
+#     return None

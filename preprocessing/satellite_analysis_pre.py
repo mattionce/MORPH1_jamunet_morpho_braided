@@ -20,7 +20,7 @@ pd.options.mode.chained_assignment = None
 
 # set file directory
 dir_orig = r'data\satellite\original' # original images
-dir_proc = r'data\satellite\preprocessed' # preprocesed images
+dir_proc = r'data\satellite\preprocessed' # preprocesed images # Mattia's comment: this variable is not needed!
 
 def get_path_images(path, collection, train_val_test, year, month, day = 1, reach=1):
     '''
@@ -109,37 +109,37 @@ def rename_images(collection, train_val_test, reach=1, dir=r'data\satellite\orig
             
     return None
 
-def list_paths(collection, train_val_test, reach=1, dir_orig=r'data\satellite\original'):
-    '''
-    Create a list containing all the paths of the images stored in a specified folder.
+# def list_paths(collection, train_val_test, reach=1, dir_orig=r'data\satellite\original'):
+#     '''
+#     Create a list containing all the paths of the images stored in a specified folder.
 
-    Inputs:
-           collection = str, specifies collection.
-                        Available options: 'JRC/GSW1_4/MonthlyHistory' (the only one given here), 
-                                           'LANDSAT/LT05/C02/T1_L2', 
-                                           'COPERNICUS/S1_GRD'. 
-           train_val_test = str, specifies for what the images are used for.
-                            available options: 'training', 'validation' and 'testing'
-           reach = int, representing reach number. Number increases going upstream
-                   For training, the available range is 1-28 (included). 
-                   For validation and testing there is only 1 reach
-           dir_orig = str, sets the directory where original files are stored.
-                      default: r'data\satellite\original', contains original (not preprocessed) images
-                      other option: r'data\satellite\preprocessed' 
+#     Inputs:
+#            collection = str, specifies collection.
+#                         Available options: 'JRC/GSW1_4/MonthlyHistory' (the only one given here), 
+#                                            'LANDSAT/LT05/C02/T1_L2', 
+#                                            'COPERNICUS/S1_GRD'. 
+#            train_val_test = str, specifies for what the images are used for.
+#                             available options: 'training', 'validation' and 'testing'
+#            reach = int, representing reach number. Number increases going upstream
+#                    For training, the available range is 1-28 (included). 
+#                    For validation and testing there is only 1 reach
+#            dir_orig = str, sets the directory where original files are stored.
+#                       default: r'data\satellite\original', contains original (not preprocessed) images
+#                       other option: r'data\satellite\preprocessed' 
     
-    Output: 
-           final_path = str, list of paths of the images given usage and reach
-    '''
-    # get directory given collection, use and reach
-    collection_reach = fr'{collection}_{train_val_test}_r{reach}'
+#     Output: 
+#            final_path = str, list of paths of the images given usage and reach
+#     '''
+#     # get directory given collection, use and reach
+#     collection_reach = fr'{collection}_{train_val_test}_r{reach}'
 
-    # get full directory
-    full_path = os.path.join(dir_orig, collection_reach)
-    list = os.listdir(full_path)
+#     # get full directory
+#     full_path = os.path.join(dir_orig, collection_reach)
+#     list = os.listdir(full_path)
 
-    # generate final directory
-    final_path = [os.path.join(full_path, list[i]) for i in range(len(list))]
-    return final_path
+#     # generate final directory
+#     final_path = [os.path.join(full_path, list[i]) for i in range(len(list))]
+#     return final_path
 
 def get_angle_rotation(image):
     '''

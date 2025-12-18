@@ -12,59 +12,59 @@ from osgeo import gdal
 from datetime import datetime
 from PIL import Image, ImageOps
 
-# set file directories
+# set file directories # Mattia's comment: these variables are not needed!!
 dir_orig = r'data\satellite\original' # original images
 dir_proc = r'data\satellite\preprocessed' # preprocesed images
 
-def load_image(file_path, tensor=True, show=False, cmap='gray', vmin=-1, vmax=1):
-    '''
-    Load and possibly show a single image using Image library. It also converts and returns it into a numpy array or a torch.tensor.
-    By default it shows a grayscale image. It is implemented and tested to work with JRC collection exported in grayscale.
+# def load_image(file_path, tensor=True, show=False, cmap='gray', vmin=-1, vmax=1):
+#     '''
+#     Load and possibly show a single image using Image library. It also converts and returns it into a numpy array or a torch.tensor.
+#     By default it shows a grayscale image. It is implemented and tested to work with JRC collection exported in grayscale.
 
-    It also scales pixels values to be in the following way:
-        - no-data: -1
-        - non-water: 0
-        - water: 1
+#     It also scales pixels values to be in the following way:
+#         - no-data: -1
+#         - non-water: 0
+#         - water: 1
 
-    Inputs: 
-           file_path = str, contains full path of the image to be shown
-           tensor = bool, sets whether the function returns a torch.tensor or a numpy.array
-           show = bool, specifies whether image is shown or not.
-                  default: False, if set to True image is shown
-           cmap = str, key to set the visualization channels
-                  default: 'gray'
-           vmin = int, minimum value used for visualization.
-                  default: -1, can take any value. 
-                  If set to 0, no-data pixels will not be displayed 
-           vmax = int, maximum value used for visualization.
-                  default: 1, can take any value.
+#     Inputs: 
+#            file_path = str, contains full path of the image to be shown
+#            tensor = bool, sets whether the function returns a torch.tensor or a numpy.array
+#            show = bool, specifies whether image is shown or not.
+#                   default: False, if set to True image is shown
+#            cmap = str, key to set the visualization channels
+#                   default: 'gray'
+#            vmin = int, minimum value used for visualization.
+#                   default: -1, can take any value. 
+#                   If set to 0, no-data pixels will not be displayed 
+#            vmax = int, maximum value used for visualization.
+#                   default: 1, can take any value.
     
-    Output: 
-           torch.tensor(array_img) = torch.tensor, 2D tensor representing the loaded image
-        or
-           array_img = np.array, 2D array representing the loaded image           
-    '''
-    with Image.open(file_path) as img:
-        img = img.convert('L')
-        img = ImageOps.autocontrast(img, cutoff=(-1, 1))
+#     Output: 
+#            torch.tensor(array_img) = torch.tensor, 2D tensor representing the loaded image
+#         or
+#            array_img = np.array, 2D array representing the loaded image           
+#     '''
+#     with Image.open(file_path) as img:
+#         img = img.convert('L')
+#         img = ImageOps.autocontrast(img, cutoff=(-1, 1))
         
-        # convert to numpy.array
-        array_img = np.array(img).astype(int)
+#         # convert to numpy.array
+#         array_img = np.array(img).astype(int)
 
-        # scale pixel classes
-        array_img[array_img == 0] = -1      # no-data
-        array_img[array_img == 127] = 0     # non-water  
-        array_img[array_img == 255] = 1     # water
+#         # scale pixel classes
+#         array_img[array_img == 0] = -1      # no-data
+#         array_img[array_img == 127] = 0     # non-water  
+#         array_img[array_img == 255] = 1     # water
         
-        # show the image
-        if show==True:
-            plt.imshow(array_img, cmap=cmap, vmin=vmin, vmax=vmax)
-            # get year, month and day of image by splitting the path
-            year, month, day = file_path.split('\\')[-1].split('_')[:3]
-            plt.title(f'{year}-{month}-{day}')
-            plt.show()
+#         # show the image
+#         if show==True:
+#             plt.imshow(array_img, cmap=cmap, vmin=vmin, vmax=vmax)
+#             # get year, month and day of image by splitting the path
+#             year, month, day = file_path.split('\\')[-1].split('_')[:3]
+#             plt.title(f'{year}-{month}-{day}')
+#             plt.show()
 
-    return torch.tensor(array_img) if tensor else array_img
+#     return torch.tensor(array_img) if tensor else array_img
 
 def show_image_array(path, scaled_classes=True, cmap='gray', vmin=0, vmax=2, show=True, save_img=False):
     '''
@@ -142,280 +142,280 @@ def show_image_array(path, scaled_classes=True, cmap='gray', vmin=0, vmax=2, sho
 
     return img_array, fig, ax if save_img else img_array
 
-def load_all_csv(train_val_test, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], dir_folders=r'data\satellite\preprocessed', index_col=None):
-    '''
-    This function is used to load all `*.csv` files containing info on the pixel classes distribution of JRC collection images.
-    It creates a list of dataframes, one for every reach.
+# def load_all_csv(train_val_test, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], dir_folders=r'data\satellite\preprocessed', index_col=None):
+#     '''
+#     This function is used to load all `*.csv` files containing info on the pixel classes distribution of JRC collection images.
+#     It creates a list of dataframes, one for every reach.
 
-    Inputs: 
-           train_val_test = str, specifies for what the images are used for.
-                           available options: 'training', 'validation' and 'testing'
-           cols = list of str, contains the name of columns to be loaded 
-                  default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
-           dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\preprocessed'
-           index_col = int or None, sets the column which is used as index for the new dataframe.
-                       default: None, no column used as index. Index becomes the total count of images.
-                       Other available options: 1, if 'Date image' column is used as index. Not recommended to avoid confusion 
+#     Inputs: 
+#            train_val_test = str, specifies for what the images are used for.
+#                            available options: 'training', 'validation' and 'testing'
+#            cols = list of str, contains the name of columns to be loaded 
+#                   default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
+#            dir_folders = str, directory where folders are stored
+#                          default: r'data\satellite\preprocessed'
+#            index_col = int or None, sets the column which is used as index for the new dataframe.
+#                        default: None, no column used as index. Index becomes the total count of images.
+#                        Other available options: 1, if 'Date image' column is used as index. Not recommended to avoid confusion 
     
-    Output: 
-           dfs = list, contains one dataframe for each river reach given the use (training, validation, testing)
-    ''' 
-    reach_id = 0
-    dfs = [] # initiate list of dataframes
+#     Output: 
+#            dfs = list, contains one dataframe for each river reach given the use (training, validation, testing)
+#     ''' 
+#     reach_id = 0
+#     dfs = [] # initiate list of dataframes
 
-    folders = []
+#     folders = []
 
-    for folder in os.listdir(dir_folders):
-        if train_val_test in folder: # include only specific training, validation or testing reaches
-            folders.append(folder)
+#     for folder in os.listdir(dir_folders):
+#         if train_val_test in folder: # include only specific training, validation or testing reaches
+#             folders.append(folder)
 
-    # sort folders based on reach_id
-    folders.sort(key=lambda x: int(x.split(f'_{train_val_test}_r')[-1]))
+#     # sort folders based on reach_id
+#     folders.sort(key=lambda x: int(x.split(f'_{train_val_test}_r')[-1]))
 
-    # load each single csv separately
-    for folder in folders:
-        folders_path = os.path.join(dir_folders, folder)
-        for filename in os.listdir(folders_path):
-            if filename.endswith('allpixels.csv'): 
-                reach_id += 1
-                path = os.path.join(folders_path, train_val_test + f'_r{reach_id}_' + 'allpixels.csv')
-                if index_col == None:
-                    df = pd.read_csv(path, usecols=cols) 
-                else:
-                    df = pd.read_csv(path, usecols=cols, index_col=index_col)
-                dfs.append(df)
-    return dfs
+#     # load each single csv separately
+#     for folder in folders:
+#         folders_path = os.path.join(dir_folders, folder)
+#         for filename in os.listdir(folders_path):
+#             if filename.endswith('allpixels.csv'): 
+#                 reach_id += 1
+#                 path = os.path.join(folders_path, train_val_test + f'_r{reach_id}_' + 'allpixels.csv')
+#                 if index_col == None:
+#                     df = pd.read_csv(path, usecols=cols) 
+#                 else:
+#                     df = pd.read_csv(path, usecols=cols, index_col=index_col)
+#                 dfs.append(df)
+#     return dfs
 
-def create_long_df(train_val_test, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], dir_folders=r'data\satellite\preprocessed'):
-    '''
-    This function is used to create a complete dataframe for a given image use (training, validation and testing) with all reaches. 
-    It contains the complete info on the pixel classes distribution of JRC collection images.
-    It creates one full dataframe containing the values for every reach.
+# def create_long_df(train_val_test, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], dir_folders=r'data\satellite\preprocessed'):
+#     '''
+#     This function is used to create a complete dataframe for a given image use (training, validation and testing) with all reaches. 
+#     It contains the complete info on the pixel classes distribution of JRC collection images.
+#     It creates one full dataframe containing the values for every reach.
 
-    Inputs: 
-           train_val_test = str, specifies for what the images are used for.
-                            available options: 'training', 'validation' and 'testing'
-           cols = list of str, contains the name of columns to be loaded 
-                  default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
-           dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\preprocessed'
+#     Inputs: 
+#            train_val_test = str, specifies for what the images are used for.
+#                             available options: 'training', 'validation' and 'testing'
+#            cols = list of str, contains the name of columns to be loaded 
+#                   default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
+#            dir_folders = str, directory where folders are stored
+#                          default: r'data\satellite\preprocessed'
     
-    Output: 
-           df = dataframe, contains all pixel classes values among years and reaches given the use (training, validation and testing)
-    ''' 
-    # get list of dataframes
-    dfs = load_all_csv(train_val_test, cols, dir_folders)
+#     Output: 
+#            df = dataframe, contains all pixel classes values among years and reaches given the use (training, validation and testing)
+#     ''' 
+#     # get list of dataframes
+#     dfs = load_all_csv(train_val_test, cols, dir_folders)
 
-    # create dataframe with all values of training reach
-    date_reach_col = []
-    no_data_col = []
-    non_water_col = []
-    water_col = []
+#     # create dataframe with all values of training reach
+#     date_reach_col = []
+#     no_data_col = []
+#     non_water_col = []
+#     water_col = []
 
-    for i in range(len(dfs)):
-        df = dfs[i] # get single dataframe
-        df.columns = cols
+#     for i in range(len(dfs)):
+#         df = dfs[i] # get single dataframe
+#         df.columns = cols
 
-        # get only values of each column
-        date_reach = df.iloc[:,0].values
-        no_data = df.iloc[:,1].values
-        non_water = df.iloc[:,2].values
-        water = df.iloc[:,3].values
+#         # get only values of each column
+#         date_reach = df.iloc[:,0].values
+#         no_data = df.iloc[:,1].values
+#         non_water = df.iloc[:,2].values
+#         water = df.iloc[:,3].values
 
-        # extend original empty list
-        date_reach_col.extend(date_reach)
-        no_data_col.extend(no_data)
-        non_water_col.extend(non_water)
-        water_col.extend(water)
+#         # extend original empty list
+#         date_reach_col.extend(date_reach)
+#         no_data_col.extend(no_data)
+#         non_water_col.extend(non_water)
+#         water_col.extend(water)
     
-    # zip lists to create complete dataframe
-    all_reaches = list(zip(date_reach_col, no_data_col, non_water_col, water_col))
-    df = pd.DataFrame(all_reaches)
-    df.columns = cols
-    return df
+#     # zip lists to create complete dataframe
+#     all_reaches = list(zip(date_reach_col, no_data_col, non_water_col, water_col))
+#     df = pd.DataFrame(all_reaches)
+#     df.columns = cols
+#     return df
 
-def get_info_images(df, acc_percentage, shape=(1000,500)):
-    '''
-    This function returns the number of available, perfect and unavailable images of a given dataframe 
-    containing the total number of pixels for each class (0: no-data, 1: non-water, 2: water).
+# def get_info_images(df, acc_percentage, shape=(1000,500)):
+#     '''
+#     This function returns the number of available, perfect and unavailable images of a given dataframe 
+#     containing the total number of pixels for each class (0: no-data, 1: non-water, 2: water).
 
-    It assumes that the dataframe has the following columns:
-    ['no-data: 0', 'non-water: 1', 'water: 2']
+#     It assumes that the dataframe has the following columns:
+#     ['no-data: 0', 'non-water: 1', 'water: 2']
 
-    Inputs: 
-            df = pandas dataframe, contains amount of pixels per each class given image and usage (training, validation and testing).
-            acc_percentage = float, percentage of acceptable cloud cover (i.e., no-data pixels) over the total.
-                             Acceptable values: 0 < acc_percentage < 1
-            shape = tuple, specifies shape of the images, needed for calculating the total number of pixels.
-                    default: (1000,500)
-    Output: 
-           none, prints a statement including relevant information on images availability
-    '''
-    pixels = shape[0]*shape[1]
-    cloud_thr = int(pixels * acc_percentage)
+#     Inputs: 
+#             df = pandas dataframe, contains amount of pixels per each class given image and usage (training, validation and testing).
+#             acc_percentage = float, percentage of acceptable cloud cover (i.e., no-data pixels) over the total.
+#                              Acceptable values: 0 < acc_percentage < 1
+#             shape = tuple, specifies shape of the images, needed for calculating the total number of pixels.
+#                     default: (1000,500)
+#     Output: 
+#            none, prints a statement including relevant information on images availability
+#     '''
+#     pixels = shape[0]*shape[1]
+#     cloud_thr = int(pixels * acc_percentage)
 
-    nodata = len(df[df['no-data: 0'] == pixels])
-    perfect = len(df[df['no-data: 0'] == 0])
-    ok = len(df[df['no-data: 0'] <= cloud_thr])
+#     nodata = len(df[df['no-data: 0'] == pixels])
+#     perfect = len(df[df['no-data: 0'] == 0])
+#     ok = len(df[df['no-data: 0'] <= cloud_thr])
 
-    print(f'Total images: {len(df)}.\n\
-Completely cloudy images: {nodata}.\n\
-Perfect (no clouds) images: {perfect}.\n\
-Images usable (no-data pixels threshold = {cloud_thr}): {ok}.')
-    return None
+#     print(f'Total images: {len(df)}.\n\
+# Completely cloudy images: {nodata}.\n\
+# Perfect (no clouds) images: {perfect}.\n\
+# Images usable (no-data pixels threshold = {cloud_thr}): {ok}.')
+#     return None
 
-def clear_full_df(train_val_test, nodata_thr, water_thr, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], 
-             dir_folders = r'data\satellite\preprocessed', dir_output = r'cleared_csv'):
-    '''
-    This function is used to select all images that respect the given amount of pixels data threshold (no-data max value and water min value).
-    It slices through the input dataframe and gets rid of all images that do not comply with the requirements.
-    It also saves a .csv file to store the clear dataframe with the information of the good images.
+# def clear_full_df(train_val_test, nodata_thr, water_thr, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], 
+#              dir_folders = r'data\satellite\preprocessed', dir_output = r'cleared_csv'):
+#     '''
+#     This function is used to select all images that respect the given amount of pixels data threshold (no-data max value and water min value).
+#     It slices through the input dataframe and gets rid of all images that do not comply with the requirements.
+#     It also saves a .csv file to store the clear dataframe with the information of the good images.
 
-    Inputs:
-           train_val_test = str, specifies for what the images are used for.
-                           available options: 'training', 'validation' and 'testing'
-           nodata_thr = int, max acceptable amount of no-data pixels 
-           water_thr = int, max acceptable amount of water pixels
-           cols = list of str, contains the name of columns to be loaded 
-                  default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
-           dir_folders = str, dirtectory where the original .csv files are stored
-                        default: r'data\satellite\preprocessed'
-           dir_output = str, contains directory where the new .csv files gets saved 
-                        default: r'cleared_csv'
+#     Inputs:
+#            train_val_test = str, specifies for what the images are used for.
+#                            available options: 'training', 'validation' and 'testing'
+#            nodata_thr = int, max acceptable amount of no-data pixels 
+#            water_thr = int, max acceptable amount of water pixels
+#            cols = list of str, contains the name of columns to be loaded 
+#                   default: ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']
+#            dir_folders = str, dirtectory where the original .csv files are stored
+#                         default: r'data\satellite\preprocessed'
+#            dir_output = str, contains directory where the new .csv files gets saved 
+#                         default: r'cleared_csv'
 
-    Output:
-           clean_df = pandas df, original dataframe without images that do not meet the set requirements         
-    '''
-    orig_df = create_long_df(train_val_test, cols, dir_folders)
-    # select only images that meet criteria
-    clean_df = orig_df[(orig_df['no-data: 0'] <= nodata_thr) & (orig_df['no-data: 0'] >= water_thr)]
+#     Output:
+#            clean_df = pandas df, original dataframe without images that do not meet the set requirements         
+#     '''
+#     orig_df = create_long_df(train_val_test, cols, dir_folders)
+#     # select only images that meet criteria
+#     clean_df = orig_df[(orig_df['no-data: 0'] <= nodata_thr) & (orig_df['no-data: 0'] >= water_thr)]
 
-    # save file
-    output_file = fr'{train_val_test}_cleared_nodata{str(nodata_thr)}_water{str(water_thr)}.csv'
-    output_path = os.path.join(dir_folders, dir_output, output_file)
+#     # save file
+#     output_file = fr'{train_val_test}_cleared_nodata{str(nodata_thr)}_water{str(water_thr)}.csv'
+#     output_path = os.path.join(dir_folders, dir_output, output_file)
     
-    clean_df.to_csv(output_path)
-    return clean_df
+#     clean_df.to_csv(output_path)
+#     return clean_df
 
-def clear_single_df(train_val_test, nodata_thr, water_thr, dir_folders = r'data\satellite\preprocessed'):
-    '''
-    This function removes the images that do not meet the requirements (no-data and water max/min pixels) from the original dataframe, which contains all images.
-    It then saves the remaining images on another *.csv file in the same directory.
+# def clear_single_df(train_val_test, nodata_thr, water_thr, dir_folders = r'data\satellite\preprocessed'):
+#     '''
+#     This function removes the images that do not meet the requirements (no-data and water max/min pixels) from the original dataframe, which contains all images.
+#     It then saves the remaining images on another *.csv file in the same directory.
 
-    This function performs the same operation of `clear_full_df` but compared to this one it accesses each *.csv file separately without creating a full one,
-    i.e., it creates a file for each combination of use (training, validation and testing) and reach id.
+#     This function performs the same operation of `clear_full_df` but compared to this one it accesses each *.csv file separately without creating a full one,
+#     i.e., it creates a file for each combination of use (training, validation and testing) and reach id.
 
-    Inputs:
-           train_val_test = str, specifies for what the images are used for.
-                           available options: 'training', 'validation' and 'testing'
-           nodata_thr = int, max acceptable amount of no-data pixels 
-           water_thr = int, max acceptable amount of water pixels
-           dir_folders = str, dirtectory where the original .csv files are stored
-                        default: r'data\satellite\preprocessed'
+#     Inputs:
+#            train_val_test = str, specifies for what the images are used for.
+#                            available options: 'training', 'validation' and 'testing'
+#            nodata_thr = int, max acceptable amount of no-data pixels 
+#            water_thr = int, max acceptable amount of water pixels
+#            dir_folders = str, dirtectory where the original .csv files are stored
+#                         default: r'data\satellite\preprocessed'
     
-    Output: 
-           none, it creates a *.csv file with information on the available images given no-data and water thresholds 
-    '''
-    reach_id = 0
-    folders = []
+#     Output: 
+#            none, it creates a *.csv file with information on the available images given no-data and water thresholds 
+#     '''
+#     reach_id = 0
+#     folders = []
 
-    for folder in os.listdir(dir_folders):
-        if train_val_test in folder: # include only specific training, validation or testing reaches
-            folders.append(folder)
+#     for folder in os.listdir(dir_folders):
+#         if train_val_test in folder: # include only specific training, validation or testing reaches
+#             folders.append(folder)
     
-    # sort folders based on reach_id
-    folders.sort(key=lambda x: int(x.split(f'_{train_val_test}_r')[-1]))
+#     # sort folders based on reach_id
+#     folders.sort(key=lambda x: int(x.split(f'_{train_val_test}_r')[-1]))
 
-    # loop through folders
-    for folder in folders:
-        folders_path = os.path.join(dir_folders, folder)
-        for filename in os.listdir(folders_path):
-            if filename.endswith('allpixels.csv'):
-                reach_id += 1
-                path = os.path.join(folders_path, train_val_test + f'_r{reach_id}_' + 'allpixels.csv')
-                df = pd.read_csv(path)
+#     # loop through folders
+#     for folder in folders:
+#         folders_path = os.path.join(dir_folders, folder)
+#         for filename in os.listdir(folders_path):
+#             if filename.endswith('allpixels.csv'):
+#                 reach_id += 1
+#                 path = os.path.join(folders_path, train_val_test + f'_r{reach_id}_' + 'allpixels.csv')
+#                 df = pd.read_csv(path)
 
-                # get only images that meet the requirements
-                clean_df = df[(df['no-data: 0'] <= nodata_thr) & (df['no-data: 0'] >= water_thr)]
+#                 # get only images that meet the requirements
+#                 clean_df = df[(df['no-data: 0'] <= nodata_thr) & (df['no-data: 0'] >= water_thr)]
 
-                # save file
-                output_file = fr'{train_val_test}_r{reach_id}_cleared_nodata{str(nodata_thr)}_water{str(water_thr)}.csv'
-                output_path = os.path.join(dir_folders, folder, output_file)
-                clean_df.to_csv(output_path)
-    return None
+#                 # save file
+#                 output_file = fr'{train_val_test}_r{reach_id}_cleared_nodata{str(nodata_thr)}_water{str(water_thr)}.csv'
+#                 output_path = os.path.join(dir_folders, folder, output_file)
+#                 clean_df.to_csv(output_path)
+#     return None
 
-def compute_diff(train_val_test, reach_id, dir_folders = r'data\satellite\preprocessed', collection = r'JRC_GSW1_4_MonthlyHistory'):
-    '''
-    This function loads all images of a specified folder (use and reach id), computes the difference between one image and the following one 
-    considering only those values that are either -1 or 1 and counts all these different pixels and returns a dataframe containing for each combination 
-    of start/end image the related pixels difference.  
+# def compute_diff(train_val_test, reach_id, dir_folders = r'data\satellite\preprocessed', collection = r'JRC_GSW1_4_MonthlyHistory'):
+#     '''
+#     This function loads all images of a specified folder (use and reach id), computes the difference between one image and the following one 
+#     considering only those values that are either -1 or 1 and counts all these different pixels and returns a dataframe containing for each combination 
+#     of start/end image the related pixels difference.  
     
-    It only considers pixels whose value is either -1 and 1 because these result from the either a difference of [1-2] or [2-1], 
-    which means there was erosion or sedimentaion, respectively. Other changes ([2-0], [0-2]) or non-changes ([0-0], [1-1] and [2-2]).
+#     It only considers pixels whose value is either -1 and 1 because these result from the either a difference of [1-2] or [2-1], 
+#     which means there was erosion or sedimentaion, respectively. Other changes ([2-0], [0-2]) or non-changes ([0-0], [1-1] and [2-2]).
 
-    The function is implemented and tested to work for grayscale images retrieved from JRC collection.
+#     The function is implemented and tested to work for grayscale images retrieved from JRC collection.
 
-    Inputs:
-           train_val_test = str, specifies for what the images are used for.
-                           available options: 'training', 'validation' and 'testing'
-           reach = int, representing reach number. Number increases going upstream.
-                   default: 1, applies for both validation and testing.
-                   For training, the available range is 1-28 (included)
-           dir_folders = str, dirtectory where the original .csv files are stored
-                         default: r'data\satellite\preprocessed'
-           collection = str, specifies the satellite images collection.
-                       default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
+#     Inputs:
+#            train_val_test = str, specifies for what the images are used for.
+#                            available options: 'training', 'validation' and 'testing'
+#            reach = int, representing reach number. Number increases going upstream.
+#                    default: 1, applies for both validation and testing.
+#                    For training, the available range is 1-28 (included)
+#            dir_folders = str, dirtectory where the original .csv files are stored
+#                          default: r'data\satellite\preprocessed'
+#            collection = str, specifies the satellite images collection.
+#                        default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
     
-    Output: 
-           df = pandas DataFrame, contains info on pixels difference for each combination of start/end image
-                columns: 'Start date', 'End date', 'Different pixels'  
-    '''
+#     Output: 
+#            df = pandas DataFrame, contains info on pixels difference for each combination of start/end image
+#                 columns: 'Start date', 'End date', 'Different pixels'  
+#     '''
 
-    folder_path = os.path.join(dir_folders, collection + fr'_{train_val_test}_r{reach_id}')
+#     folder_path = os.path.join(dir_folders, collection + fr'_{train_val_test}_r{reach_id}')
 
-    # initialize lists with dates and images
-    names_date = []
-    imgs = []
+#     # initialize lists with dates and images
+#     names_date = []
+#     imgs = []
 
-    # load each single tif image separately
-    for filename in os.listdir(folder_path):
-        if filename.endswith('.tif'):
-            file_path = os.path.join(folder_path, filename)
-            name_date = filename.split(f'_{train_val_test}', 1)[0]
-            names_date.append(name_date)
-            img = show_image_array(path=file_path, show=False)
-            imgs.append(img)
+#     # load each single tif image separately
+#     for filename in os.listdir(folder_path):
+#         if filename.endswith('.tif'):
+#             file_path = os.path.join(folder_path, filename)
+#             name_date = filename.split(f'_{train_val_test}', 1)[0]
+#             names_date.append(name_date)
+#             img = show_image_array(path=file_path, show=False)
+#             imgs.append(img)
     
-    # initialize total_difference, (interesting) difference and start/end date lists
-    total_diffs = []
-    diffs = []
-    start_date = []
-    end_date = []
+#     # initialize total_difference, (interesting) difference and start/end date lists
+#     total_diffs = []
+#     diffs = []
+#     start_date = []
+#     end_date = []
 
-    for i in range(1, len(imgs)):
-        # simple diffeerence
-        total_diff = imgs[i] - imgs[i-1]
-        total_diffs.append(total_diff)
+#     for i in range(1, len(imgs)):
+#         # simple diffeerence
+#         total_diff = imgs[i] - imgs[i-1]
+#         total_diffs.append(total_diff)
         
-        # counts only total_diff = 1
-        ones = np.count_nonzero(total_diff == 1) 
-        # counts only total_diff = -1
-        minus_ones = np.count_nonzero(total_diff == -1) 
+#         # counts only total_diff = 1
+#         ones = np.count_nonzero(total_diff == 1) 
+#         # counts only total_diff = -1
+#         minus_ones = np.count_nonzero(total_diff == -1) 
 
-        # gets sum of (-1,+1) changed pixels
-        diff = ones + minus_ones
-        diffs.append(diff)
+#         # gets sum of (-1,+1) changed pixels
+#         diff = ones + minus_ones
+#         diffs.append(diff)
 
-        # gets start/end date combinations
-        start_date.append(names_date[i-1])
-        end_date.append(names_date[i])
+#         # gets start/end date combinations
+#         start_date.append(names_date[i-1])
+#         end_date.append(names_date[i])
         
-    # create df
-    combined = list(zip(start_date, end_date, diffs))
-    df = pd.DataFrame(combined)
-    df.columns = ['Start date', 'End date', 'Different pixels']
-    return df
+#     # create df
+#     combined = list(zip(start_date, end_date, diffs))
+#     df = pd.DataFrame(combined)
+#     df.columns = ['Start date', 'End date', 'Different pixels']
+#     return df
 
 def convert_to_date(string_date):
     '''
@@ -438,63 +438,63 @@ def convert_to_date(string_date):
             datetime_obj.append(obj)
     return datetime_obj
 
-def monthly_combinations(clean_df):
-    '''
-    STILL TO BE IMPROVED - not producing the correct output: combinations of input images if 5 images in a row,
-    given the same month, respect the requirements of no-data and water thresholds. 
+# def monthly_combinations(clean_df):
+#     '''
+#     STILL TO BE IMPROVED - not producing the correct output: combinations of input images if 5 images in a row,
+#     given the same month, respect the requirements of no-data and water thresholds. 
 
-    Gets available datasets considering combinations for each month separately.
+#     Gets available datasets considering combinations for each month separately.
 
-    Improvement to do: the function so far only works considering a time window of 4 years. It would need to be automated in order to
-    use different time windows.
+#     Improvement to do: the function so far only works considering a time window of 4 years. It would need to be automated in order to
+#     use different time windows.
     
-    Example: January 2001, January 2002, January 2003, January 2004 used as inputs to predict January 2005.
-    '''
-    # get all dates in the clean df
-    dates_df = ['_'.join(clean_df['Date image'].iloc[i].split('_')[:3]) for i in range(len(clean_df))] # splits every '_' and then joins the first 3 (yyyy_mm_dd)
+#     Example: January 2001, January 2002, January 2003, January 2004 used as inputs to predict January 2005.
+#     '''
+#     # get all dates in the clean df
+#     dates_df = ['_'.join(clean_df['Date image'].iloc[i].split('_')[:3]) for i in range(len(clean_df))] # splits every '_' and then joins the first 3 (yyyy_mm_dd)
 
-    years = [i for i in range(1987, 2022)]
-    months = [i for i in range(1, 13)]
+#     years = [i for i in range(1987, 2022)]
+#     months = [i for i in range(1, 13)]
 
-    dates = []
+#     dates = []
 
-    for year in years:
-        for month in months:
-            if month < 10:
-                date = f'{year}_0{month}_01'
-            else: 
-                date = f'{year}_{month}_01'
-            dates.append(date)
-    dates = dates[11:]
+#     for year in years:
+#         for month in months:
+#             if month < 10:
+#                 date = f'{year}_0{month}_01'
+#             else: 
+#                 date = f'{year}_{month}_01'
+#             dates.append(date)
+#     dates = dates[11:]
 
-    datasets = []
-    missing = []
+#     datasets = []
+#     missing = []
 
-    for element in dates:
-        year = str((dates[dates == element].split('_'))[0])
-        month = str((dates[dates == element].split('_'))[1])
+#     for element in dates:
+#         year = str((dates[dates == element].split('_'))[0])
+#         month = str((dates[dates == element].split('_'))[1])
         
-        condition1 = f'{int(year)+1}_{month}_01' in dates_df
-        condition2 = f'{int(year)+2}_{month}_01' in dates_df
-        condition3 = f'{int(year)+3}_{month}_01' in dates_df
-        condition4 = f'{int(year)+4}_{month}_01' in dates_df
+#         condition1 = f'{int(year)+1}_{month}_01' in dates_df
+#         condition2 = f'{int(year)+2}_{month}_01' in dates_df
+#         condition3 = f'{int(year)+3}_{month}_01' in dates_df
+#         condition4 = f'{int(year)+4}_{month}_01' in dates_df
 
-        if condition1 and condition2 and condition3 and condition4:
-            dataset = [f'{year}_{month}_01', f'{int(year)+1}_{month}_01', f'{int(year)+2}_{month}_01', f'{int(year)+3}_{month}_01', f'{int(year)+4}_{month}_01']
-            datasets.append(dataset)
-        else:
-            miss = f'Starting {f"{year}_{month}_01"} misses: '
-            if not condition1:
-                miss += f'{int(year)+1}_{month}_01, '
-            if not condition2:
-                miss += f'{int(year)+2}_{month}_01, '
-            if not condition3:
-                miss += f'{int(year)+3}_{month}_01, '
-            if not condition4:
-                miss += f'{int(year)+4}_{month}_01'
-            missing.append(miss)
+#         if condition1 and condition2 and condition3 and condition4:
+#             dataset = [f'{year}_{month}_01', f'{int(year)+1}_{month}_01', f'{int(year)+2}_{month}_01', f'{int(year)+3}_{month}_01', f'{int(year)+4}_{month}_01']
+#             datasets.append(dataset)
+#         else:
+#             miss = f'Starting {f"{year}_{month}_01"} misses: '
+#             if not condition1:
+#                 miss += f'{int(year)+1}_{month}_01, '
+#             if not condition2:
+#                 miss += f'{int(year)+2}_{month}_01, '
+#             if not condition3:
+#                 miss += f'{int(year)+3}_{month}_01, '
+#             if not condition4:
+#                 miss += f'{int(year)+4}_{month}_01'
+#             missing.append(miss)
             
-    return datasets, missing
+#     return datasets, missing
 
 def get_month(df, single_month):
     '''
