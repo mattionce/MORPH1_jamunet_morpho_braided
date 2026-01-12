@@ -122,7 +122,7 @@ Max cloud coverage: {cloud_cov}%")
     return None
 
 def show_single_image(collection, train_val_test, year, month, day = 1, reach = 1, img_res=30, 
-                      path=r'data\satellite\original', show=True, grayscale=False, vmin=0, vmax=2):
+                      path=r'data\satellite\original', show=True, grayscale=False, vmin=0, vmax=2): #MODIFIED
     '''
     Function used for plotting the satellite image given the collection and date.
 
