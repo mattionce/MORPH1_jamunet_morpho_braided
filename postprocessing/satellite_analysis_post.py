@@ -159,6 +159,7 @@ def show_single_image(collection, train_val_test, year, month, day = 1, reach = 
             plot of the satellite image  
     '''  
     img_path = get_path_images(path, collection, train_val_test, year, month, day, reach)
+    print("IMG PATH:", img_path)
     image = mpimg.imread(img_path)
 
     if show==True:
