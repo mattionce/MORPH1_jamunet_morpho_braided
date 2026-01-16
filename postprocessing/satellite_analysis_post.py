@@ -1,5 +1,5 @@
 # This module contains the functions used for plotting and getting information
-# on the satellite images available for the chosen datasets
+# on the _ images available for the chosen datasets
 
 import os
 
@@ -74,7 +74,7 @@ std: {np.std(filtered_values2).round(2)}\n")
 
 def plot_series(collection, cloud_cov=100, time_int=365, old=False):
     '''
-    Function used to plot the chart containing the number of satellite images in the specified collection.
+    Function used to plot the chart containing the number of _ images in the specified collection.
     Returns two plots: the upper one contains the number of images available for each day, 
     the lower one shows the cumulative count of images throughout years.
 
@@ -122,9 +122,9 @@ Max cloud coverage: {cloud_cov}%")
     return None
 
 def show_single_image(collection, train_val_test, year, month, day = 1, reach = 1, img_res=30, 
-                      path=r'data\satellite\original', show=True, grayscale=False, vmin=0, vmax=2): #MODIFIED
+                      path=r'data\satellite_ganges\original', show=True, grayscale=False, vmin=0, vmax=2): #MODIFIED
     '''
-    Function used for plotting the satellite image given the collection and date.
+    Function used for plotting the _ image given the collection and date.
 
     Inputs: 
            collection = str, specifies dataset.
@@ -143,7 +143,7 @@ def show_single_image(collection, train_val_test, year, month, day = 1, reach = 
            img_res = int, image resolution (m).
                      default: 30 m.
            path = str, specifies directory where images are stored
-                  default: r'data\satellite\original'
+                  default: r'data\_\original'
            show = bool, specifies whether the image is shown or not.
                   default: True, set to False in case the image should not be displayed.
            grasyscale = bool, specifies if image is displayed in grayscale.
@@ -156,7 +156,7 @@ def show_single_image(collection, train_val_test, year, month, day = 1, reach = 
                     dim 0 = length (rows)
                     dim 1 = width (cols)
                     dim 2 = channels (RGB/grey scale)
-            plot of the satellite image  
+            plot of the _ image  
     '''  
     img_path = get_path_images(path, collection, train_val_test, year, month, day, reach)
     print("IMG PATH:", img_path)
@@ -186,7 +186,7 @@ def show_single_image(collection, train_val_test, year, month, day = 1, reach = 
     return image
 
 def get_image_shape(collection, train_val_test, year, month, day = 1, reach = 1, img_res=30,
-                    path=r'data\satellite\original', show=False, grayscale=False, return_array=False):
+                    path=r'data\satellite_ganges\original', show=False, grayscale=False, return_array=False):
     '''
     Function used to get information on the shape of the images. Returns number of rows and columsn, respectively length and width of the image.
     The thirds dimension exists only for RGB images and represents the number of channels of the image.
@@ -208,7 +208,7 @@ def get_image_shape(collection, train_val_test, year, month, day = 1, reach = 1,
            img_res = int, image resolution (m).
                      default: 30 m.
            path = str, specifies directory where images are stored
-                  default: r'data\satellite\original'
+                  default: r'data\_\original'
            show = bool, specifies whether the image is shown or not.
                   default: False, set to True in case the image should be displayed (not recommended).
            grayscale = bool, specifies whether image is in RGB or grayscale.
@@ -244,7 +244,7 @@ Which corresponds to length: {shape[0]*img_res/1000} km and width: {shape[1]*img
     return shape if return_array == True else None
 
 def show_yearly_images(collection, train_val_test, year, day = 1, 
-                       reach = 1, img_res=30,  path=r'data\satellite\original'):
+                       reach = 1, img_res=30,  path=r'data\_\original'):
     '''
     Function used to plot images of a whole year - can be used with JRC dataset (1 image/month with date always set on 1st day of the month).
     If collection is not JRC_GSW1_4_MonthlyHistory a ValueError is raised. A future improvement will make sure that the function works for all other datasets.
@@ -266,7 +266,7 @@ def show_yearly_images(collection, train_val_test, year, day = 1,
            img_res = int, image resolution (m).
                      default: 30 m.
            path = str, specifies directory where images are stored
-                  default: r'data\satellite\original'
+                  default: r'data\_\original'
            show = bool, specifies whether the image is shown or not.
                   default: True, set to False in case the image should not be displayed.
     
@@ -319,7 +319,7 @@ def show_yearly_images(collection, train_val_test, year, day = 1,
     return None
 
 def years_evolution(collection, train_val_test, year_start, years_sequence, month, day = 1, 
-                    reach = 1, img_res=30, path=r'data\satellite\original', show=True):
+                    reach = 1, img_res=30, path=r'data\_\original', show=True):
     '''
     Function used to the evolution across years in a given month - can be used with JRC dataset (1 image/month with date always set on 1st day of the month).
     If collection is not JRC_GSW1_4_MonthlyHistory a ValueError is raised. A future improvement will make sure that the function works for all other datasets.
@@ -342,7 +342,7 @@ def years_evolution(collection, train_val_test, year_start, years_sequence, mont
            img_res = int, image resolution (m).
                      default: 30 m.
            path = str, specifies directory where images are stored
-                  default: r'data\satellite\original'
+                  default: r'data\_\original'
            show = bool, specifies whether the image is shown or not.
                   default: True, set to False in case the image should not be displayed.
     
@@ -397,7 +397,7 @@ def years_evolution(collection, train_val_test, year_start, years_sequence, mont
     return None
 
 def plot_image_series(collection, train_val_test, year, month, day=1, reach = 1,
-                      img_res=30, path=r'data\satellite\original', num_images=5):
+                      img_res=30, path=r'data\_\original', num_images=5):
     '''
     Function used to visualize a series of images given the collection and starting date.
 
@@ -418,7 +418,7 @@ def plot_image_series(collection, train_val_test, year, month, day=1, reach = 1,
            img_res = int, image resolution (m).
                      default: 30 m.
            path = str, specifies directory where images are stored
-                  default: r'data\satellite\original'
+                  default: r'data\_\original'
            num_images = int, sets the amount of images plotted
     
     Ouptuts: 
@@ -504,7 +504,7 @@ def plot_image_series(collection, train_val_test, year, month, day=1, reach = 1,
     return None
 
 # def plot_input_images(train_val_test, reach_id, cmap='gray', vmin=0, vmax=2, img_res=60, 
-#                       dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', show=False):
+#                       dir_folders=r'data\_\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', show=False):
 #     '''
 #     Plot all the images within a reach and use (training, validation and testing) that are used for the creation of the input dataset.
     
@@ -523,8 +523,8 @@ def plot_image_series(collection, train_val_test, year, month, day=1, reach = 1,
 #            img_res = int, image resolution (m).
 #                      default: 60 m. 
 #            dir_folders = str, directory where folders are stored
-#                          default: r'data\satellite\dataset'
-#            collection = str, specifies the satellite images collection.
+#                          default: r'data\_\dataset'
+#            collection = str, specifies the _ images collection.
 #                        default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
 #            show = bool, specifies whether single images are shown or not when calling teh `show_image_array` function.
 #                   default: False, if set to True images will be shown separately

@@ -47,7 +47,7 @@ def load_image_array(path, scaled_classes=True):
     
     return img_array
 
-def create_dir_list(train_val_test, dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory'):
+def create_dir_list(train_val_test, dir_folders=r'data\satellite_ganges\dataset', collection=r'JRC_GSW1_4_MonthlyHistory'):
     ''' 
     Get list of path of training, validation and testing datasets.
 
@@ -55,8 +55,8 @@ def create_dir_list(train_val_test, dir_folders=r'data\satellite\dataset', colle
            train_val_test = str, specifies what the images are used for.
                             available options: 'training', 'validation' and 'testing'
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
     
     Output:
@@ -76,9 +76,9 @@ def create_dir_list(train_val_test, dir_folders=r'data\satellite\dataset', colle
     list_dir.sort(key=lambda x: int(x.split(f'_{train_val_test}_r')[-1]))
     return list_dir
 
-def create_list_images(train_val_test, reach, dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory'):
+def create_list_images(train_val_test, reach, dir_folders=r'data\satellite_ganges\dataset', collection=r'JRC_GSW1_4_MonthlyHistory'):
     '''
-    Rreturn the paths of the satellite images present within a folder given use and reach. 
+    Rreturn the paths of the satellite_ganges images present within a folder given use and reach. 
     It will be used later for loading and creating the dataset.
 
     Inputs:
@@ -88,8 +88,8 @@ def create_list_images(train_val_test, reach, dir_folders=r'data\satellite\datas
                    For training, the available range is 1-28 (included). 
                    For validation and testing there is only 1 reach
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
     
     Outputs:
@@ -106,7 +106,7 @@ def create_list_images(train_val_test, reach, dir_folders=r'data\satellite\datas
             list_dir_images.append(path_image)
     return list_dir_images
 
-def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_folders=r'data\satellite\dataset', 
+def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_folders=r'data\satellite_ganges\dataset', 
                     collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
     '''
     Create the input and target dataset for each specific use and reach. Return two lists of lists. 
@@ -116,7 +116,7 @@ def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_f
 
     n-to-1 predictions
 
-    Generate binary images by replaciong `no-data` pixels with the average images stored in the .csv files available in 'data\satellite\averages'. 
+    Generate binary images by replaciong `no-data` pixels with the average images stored in the .csv files available in 'data\satellite_ganges\averages'. 
     The average images are computed with the function 'get_good_avg' stored in the module 'satellite_analysis_pre'.  
     
     Inputs: 
@@ -131,8 +131,8 @@ def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_f
                           default: -1, based on the updated pixel classes. 
                           If `scaled_classes` = False, this should be set to 0
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended). 
@@ -145,7 +145,7 @@ def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_f
     # load list of images (arrays)
     images_array = [load_image_array(list_dir_images[i], scaled_classes=scaled_classes) for i in range(len(list_dir_images))]
     # load season averages
-    avg_imgs = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite\averages') for year in range(1988, 1988 + len(images_array))]
+    avg_imgs = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite_ganges\averages') for year in range(1988, 1988 + len(images_array))]
     # replace missing data - images are now binary!
     good_images_array = [np.where(image==nodata_value, avg_imgs[i], image) for i, image in enumerate(images_array)]
         
@@ -160,7 +160,7 @@ def create_datasets(train_val_test, reach, year_target=5, nodata_value=-1, dir_f
     return input_dataset, target_dataset
 
 def combine_datasets(train_val_test, reach, year_target=5, nonwater_threshold=480000, nodata_value=-1, nonwater_value=0,   
-                     dir_folders=r'data\satellite\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
+                     dir_folders=r'data\satellite_ganges\dataset', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
     '''
     Filter the images based on `non-water` amount of pixels threshold. If the requirement is not met, the full inputs-target combination is discarded.
     Select the best images for training the model. After the averaging step, `no-data` pixels are replaced with the season and neighboours average 
@@ -184,8 +184,8 @@ def combine_datasets(train_val_test, reach, year_target=5, nonwater_threshold=48
                          default: 0, based on the updated pixel classes. 
                           If `scaled_classes` = False, this should be set to 1
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended).
@@ -219,7 +219,7 @@ def combine_datasets(train_val_test, reach, year_target=5, nonwater_threshold=48
                 filtered_target_dataset.append(target_tensor)
     return filtered_input_dataset, filtered_target_dataset
 
-def create_full_dataset(train_val_test, year_target=5, nonwater_threshold=480000, nodata_value=-1, nonwater_value=0, dir_folders=r'data\satellite\dataset', 
+def create_full_dataset(train_val_test, year_target=5, nonwater_threshold=480000, nodata_value=-1, nonwater_value=0, dir_folders=r'data\satellite_ganges\dataset', 
                         collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True, device='cuda:0', dtype=torch.int64):
     '''
     Generate the full dataset for the given use, combining all reaches.
@@ -239,8 +239,8 @@ def create_full_dataset(train_val_test, year_target=5, nonwater_threshold=480000
                             default: 0, based on the updated pixel classes. 
                             If `scaled_classes` = False, this should be set to 1
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended).
@@ -278,7 +278,7 @@ def create_full_dataset(train_val_test, year_target=5, nonwater_threshold=480000
 # TEMPORAL SPLIT #
 # ----------------------------------------- # 
 
-def split_list(train_val_test, reach, month, year_end_train=2009, year_end_val=2015, dir_folders=r'data\satellite', collection=r'JRC_GSW1_4_MonthlyHistory'):
+def split_list(train_val_test, reach, month, year_end_train=2009, year_end_val=2015, dir_folders=r'data\satellite_ganges', collection=r'JRC_GSW1_4_MonthlyHistory'):
     '''
     Split the list created for the dataset generation into three sub-lists, training, validation and testing, respectively.
     Split the lists by years, given the `year_end_train` and `year_end_val` values.
@@ -299,8 +299,8 @@ def split_list(train_val_test, reach, month, year_end_train=2009, year_end_val=2
            year_end_val = int, sets last image year used for the validation
                           default: 2015, recommended to have 5 years of both validation and testing data
            dir_folders = str, directory where datasets are stored
-                         default: r'data\satellite'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
     
     Output:
@@ -330,7 +330,7 @@ def split_list(train_val_test, reach, month, year_end_train=2009, year_end_val=2
     return train_list, val_list, test_list
 
 def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_train=2009, year_end_val=2015, year_target=5, nodata_value=-1,
-                          dir_folders=r'data\satellite', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
+                          dir_folders=r'data\satellite_ganges', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
     '''
     Creates the input and target datasets for each specific use and reach. Return two lists of lists.
     The input list has n-elements, with n depending on the year of prediction: 
@@ -339,7 +339,7 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
 
     n-to-1 predictions
 
-    Generate binary images by replaciong `no-data` pixels with the average images stored in the .csv files available in 'data\satellite\averages'. 
+    Generate binary images by replaciong `no-data` pixels with the average images stored in the .csv files available in 'data\satellite_ganges\averages'. 
     The average images are computed with the function 'get_good_avg' stored in the module 'satellite_analysis_pre'.
     
     Inputs: 
@@ -362,8 +362,8 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
                           default: -1, based on the updated pixel classes. 
                           If `scaled_classes` = False, this should be set to 0
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended). 
@@ -378,7 +378,7 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
         # list of images (arrays)
         images_train = [load_image_array(train_list[i], scaled_classes=scaled_classes) for i in range(len(train_list))]
         # load average images
-        avg_train = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite\averages') for year in range(1988, 1988 + len(images_train))]
+        avg_train = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite_ganges\averages') for year in range(1988, 1988 + len(images_train))]
         # replace missing data
         good_images_train = [np.where(image==nodata_value, avg_train[i], image) for i, image in enumerate(images_train)]
         # initialize lists
@@ -392,7 +392,7 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
     # similar procedure repeated for validation and testing datasets
     elif use_dataset == 'validation':
         images_val = [load_image_array(val_list[i], scaled_classes=scaled_classes) for i in range(len(val_list))]
-        avg_val = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite\averages') for year in range(year_end_train, year_end_train + len(images_val))]
+        avg_val = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite_ganges\averages') for year in range(year_end_train, year_end_train + len(images_val))]
         good_images_val = [np.where(image==nodata_value, avg_val[i], image) for i, image in enumerate(images_val)]
         input_val, target_val = [], [] 
         for i in range(len(good_images_val)-year_target):
@@ -403,7 +403,7 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
 
     elif use_dataset == 'testing':
         images_test = [load_image_array(test_list[i], scaled_classes=scaled_classes) for i in range(len(test_list))]
-        avg_test = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite\averages') for year in range(year_end_val, year_end_val + len(images_test))]
+        avg_test = [load_avg(train_val_test, reach, year, dir_averages=r'data\satellite_ganges\averages') for year in range(year_end_val, year_end_val + len(images_test))]
         good_images_test = [np.where(image==nodata_value, avg_test[i], image) for i, image in enumerate(images_test)]
         input_test, target_test = [], []
         for i in range(len(good_images_test)-year_target):
@@ -417,7 +417,7 @@ def create_split_datasets(train_val_test, reach, month, use_dataset, year_end_tr
 The possible choices are `training`, `validation`, `testing`.')
 
 def combine_split_datasets(train_val_test, reach, month, use_dataset, year_end_train=2009, year_end_val=2015, year_target=5, nonwater_threshold=480000, 
-                           nodata_value=-1, nonwater_value=0, dir_folders=r'data\satellite', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
+                           nodata_value=-1, nonwater_value=0, dir_folders=r'data\satellite_ganges', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True):
     '''
     Filter the images based on `non-water` amount of pixels threshold. If the requirement is not met, the full inputs-target combination is discarded.
     Select the best images for training the model. After the averaging step, `no-data` pixels are replaced with the season and neighboours average 
@@ -449,8 +449,8 @@ def combine_split_datasets(train_val_test, reach, month, use_dataset, year_end_t
                          default: 0, based on the updated pixel classes. 
                           If `scaled_classes` = False, this should be set to 1
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended).
@@ -491,7 +491,7 @@ def combine_split_datasets(train_val_test, reach, month, use_dataset, year_end_t
     return filtered_dataset
 
 def create_split_dataset(month, use_dataset, year_target=5, year_end_train=2009, year_end_val=2015, nonwater_threshold=480000, nodata_value=-1, nonwater_value=0, 
-                         dir_folders=r'data\satellite', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True, device='cuda:0', dtype=torch.int64):
+                         dir_folders=r'data\satellite_ganges', collection=r'JRC_GSW1_4_MonthlyHistory', scaled_classes=True, device='cuda:0', dtype=torch.int64):
     '''
     Generate the full dataset for the given use, combining all reaches.
     Stack all different pairs within one use in order to have the dataset ready for the training, validation and testing of the model.
@@ -516,8 +516,8 @@ def create_split_dataset(month, use_dataset, year_target=5, year_end_train=2009,
                          default: 0, based on the updated pixel classes. 
                           If `scaled_classes` = False, this should be set to 1
            dir_folders = str, directory where folders are stored
-                         default: r'data\satellite\dataset'
-           collection = str, specifies the satellite images collection.
+                         default: r'data\satellite_ganges\dataset'
+           collection = str, specifies the satellite_ganges images collection.
                         default: r'JRC_GSW1_4_MonthlyHistory', the function is implemented to work only with this dataset
            scaled_classes = bool, sets whether pixel classes are scaled to the range [-1, 1] or kept within the original one [0, 2]
                             default: True, pixel classes are scaled (recommended).

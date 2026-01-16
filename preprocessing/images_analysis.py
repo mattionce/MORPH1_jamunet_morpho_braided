@@ -13,8 +13,8 @@ from datetime import datetime
 from PIL import Image, ImageOps
 
 # set file directories # Mattia's comment: these variables are not needed!!
-dir_orig = r'data\satellite\original' # original images
-dir_proc = r'data\satellite\preprocessed' # preprocesed images
+dir_orig = r'data\satellite_ganges\original' # original images
+dir_proc = r'data\satellite_ganges\preprocessed' # preprocesed images
 
 # def load_image(file_path, tensor=True, show=False, cmap='gray', vmin=-1, vmax=1):
 #     '''
@@ -140,7 +140,8 @@ def show_image_array(path, scaled_classes=True, cmap='gray', vmin=0, vmax=2, sho
     if show:
        plt.show()
 
-    return img_array, fig, ax if save_img else img_array
+    return (img_array, fig, ax) if save_img else img_array
+
 
 # def load_all_csv(train_val_test, cols=['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], dir_folders=r'data\satellite\preprocessed', index_col=None):
 #     '''
@@ -577,7 +578,7 @@ def assign_group(df, monsoon_start=5, monsoon_end=10):
     
     return df
 
-def load_df_countpixels(train_val_test, reach_id, monsoon_start=None, monsoon_end=None, single_month=None, dir_folders = r'data\satellite\preprocessed', 
+def load_df_countpixels(train_val_test, reach_id, monsoon_start=None, monsoon_end=None, single_month=None, dir_folders = r'data\satellite_ganges\preprocessed', 
                         collection = r'JRC_GSW1_4_MonthlyHistory', cols = ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2']):
     '''
     This function loads the .csv file of a given use and reach. It creates a dataframe with the info of the .csv file (date and tot pixels per class)
@@ -665,7 +666,7 @@ def best_by_group(df, col_group = 'Group', col_min = 'no-data: 0'):
     return sorted_best
 
 def imgs_for_dataset(train_val_test, reach_id, monsoon_start=None, monsoon_end=None, single_month=None, 
-                     dir_folders = r'data\satellite\preprocessed', collection = r'JRC_GSW1_4_MonthlyHistory', 
+                     dir_folders = r'data\satellite_ganges\preprocessed', collection = r'JRC_GSW1_4_MonthlyHistory', 
                      cols = ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], col_group = 'Group', 
                      col_min = 'no-data: 0'):
     '''
@@ -716,8 +717,8 @@ def imgs_for_dataset(train_val_test, reach_id, monsoon_start=None, monsoon_end=N
 
     return best_images 
 
-def copy_images(train_val_test, reach_id,  monsoon_start=None, monsoon_end=None, single_month=None, dir_folders = r'data\satellite\preprocessed', 
-                dir_dest = r'data\satellite\dataset', collection = r'JRC_GSW1_4_MonthlyHistory', 
+def copy_images(train_val_test, reach_id,  monsoon_start=None, monsoon_end=None, single_month=None, dir_folders = r'data\satellite_ganges\preprocessed', 
+                dir_dest = r'data\satellite_ganges\dataset', collection = r'JRC_GSW1_4_MonthlyHistory', 
                 cols = ['Date image', 'no-data: 0', 'non-water: 1', 'water: 2'], col_group = 'Group', col_min = 'no-data: 0'):
     '''
     This function copies the best images of each reach considering the non-monsoon season or the specific month (depending on the arguments specified, 
