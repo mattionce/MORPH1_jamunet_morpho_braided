@@ -317,7 +317,8 @@ def split_list(train_val_test, reach, month, year_end_train=2009, year_end_val=2
     train_list, val_list, test_list = [], [], [] 
     for path in list:
         # get year of the image
-        year = int((path.split('\\')[-1]).split('_')[0])
+        import os
+        year = int(os.path.basename(path).split('_')[0])
         # training list
         if year <= year_end_train:
             train_list.append(path)
